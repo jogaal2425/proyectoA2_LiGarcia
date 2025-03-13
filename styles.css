@@ -1,0 +1,42 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+    background-color: #f4f4f4;
+}
+
+#game-container {
+    margin-top: 50px;
+}
+
+#pattern-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    margin: 20px 0;
+}
+
+.team-logo {
+    width: 80px;
+    height: 80px;
+}
+
+#drop-zone {
+    width: 80px;
+    height: 80px;
+    border: 2px dashed #333;
+    background-color: white;
+}
+
+#choices-container {
+    display: flex;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.draggable {
+    width: 80px;
+    height: 80px;
+    cursor: grab;
+}
