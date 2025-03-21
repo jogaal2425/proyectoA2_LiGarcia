@@ -3,7 +3,6 @@ document.addEventListener("DOMContentLoaded", function () {
     const timerDisplay = document.getElementById("time");
     const dropZone = document.getElementById("drop-zone");
 
-    // Temporizador
     const timer = setInterval(() => {
         timeLeft--;
         timerDisplay.textContent = timeLeft;
@@ -56,3 +55,11 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     }
 });
+
+
+// import { Juego } from './juego.js';
+
+// document.addEventListener("DOMContentLoaded", () => {
+//     const juego = new Juego();
+//     juego.iniciarJuego();
+// });
