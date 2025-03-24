@@ -10,6 +10,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (nombre && regex.test(nombre)) {
             const puntuaciones = JSON.parse(localStorage.getItem("puntuaciones")) || [];
+
+            const existe = puntuaciones.some(p => p.nombre.toLowerCase() === nombre.toLowerCase());
+            if (existe) {
+                alert("Este nombre ya ha sido registrado. Usa otro.");
+                return;
+            }
+
             puntuaciones.push({ nombre, tiempo: parseInt(tiempoTotal) });
             localStorage.setItem("puntuaciones", JSON.stringify(puntuaciones));
 
@@ -27,7 +34,7 @@ function mostrarTablaPuntuaciones() {
     const tbody = document.querySelector("#tablaPuntuaciones tbody");
 
     tbody.innerHTML = "";
-    
+
     puntuaciones.forEach(({ nombre, tiempo }) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `<td>${nombre}</td><td>${tiempo}</td>`;

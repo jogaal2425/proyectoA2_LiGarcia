@@ -55,9 +55,9 @@ export class BDIndexedDB {
             // const test1 = new Test([escudos[0], escudos[1], escudos[2], null], escudos[3]);
             // const test2 = new Test([escudos[1], escudos[3], escudos[0], null], escudos[2]);
             // const test3 = new Test([escudos[2], escudos[0], escudos[3], null], escudos[1]);
-            const test1 = new Test([escudos[0], escudos[1], escudos[2], null], escudos[3]);
+            const test1 = new Test([escudos[0], escudos[1], escudos[0], null], escudos[1]);
             const test2 = new Test([escudos[2], escudos[2], escudos[3], null], escudos[3]);
-            const test3 = new Test([escudos[2], escudos[0], escudos[3], null], escudos[1]);
+            const test3 = new Test([escudos[2], escudos[3], escudos[3], null], escudos[2]);
 
             Math.random
 
