@@ -1,85 +1,4 @@
-import { BDIndexedDB } from './modelo.js';
-import { Storage } from './storage.js';
-
-export class Juego {
-    constructor() {
-        this.tests = [];
-        this.testActual = 0;
-        this.tiempoInicio = null;
-        this.escudosDisponibles = [
-            { nombre: "Real Madrid", imagen: "img/real_madrid.png" },
-            { nombre: "Barcelona", imagen: "img/barcelona.png" },
-            { nombre: "Atletico Madrid", imagen: "img/atletico.png" },
-            { nombre: "Athletic Club", imagen: "img/athletic.png" }
-        ];
-    }
-
-    async iniciarJuego() {
-        await BDIndexedDB.inicializarTests();
-        this.tests = await BDIndexedDB.cargarTests();
-        this.tiempoInicio = Date.now();
-        this.mostrarTest();
-    }
-
-    mostrarTest() {
-        const test = this.tests[this.testActual];
-        if (!test) return this.finalizarJuego();
-
-        const tablero = document.getElementById("tablero");
-        const opciones = document.getElementById("opciones");
-
-        tablero.innerHTML = "";
-        opciones.innerHTML = "";
-
-        test.serie.forEach((escudo, index) => {
-            const casilla = document.createElement("div");
-            casilla.classList.add("casilla");
-
-            if (escudo) {
-                const img = document.createElement("img");
-                img.src = escudo.imagen;
-                img.classList.add("escudo");
-                casilla.appendChild(img);
-            } else {
-                casilla.dataset.correcto = test.respuestaCorrecta.nombre;
-                casilla.addEventListener("drop", this.validarRespuesta.bind(this));
-                casilla.addEventListener("dragover", (e) => e.preventDefault());
-            }
-
-            tablero.appendChild(casilla);
-        });
-
-        this.escudosDisponibles.forEach(escudo => {
-            const img = document.createElement("img");
-            img.src = escudo.imagen;
-            img.id = escudo.nombre;
-            img.draggable = true;
-            img.classList.add("escudo");
-            img.addEventListener("dragstart", (e) => {
-                e.dataTransfer.setData("text", escudo.nombre);
-            });
-            opciones.appendChild(img);
-        });
-    }
-
-    validarRespuesta(e) {
-        e.preventDefault();
-        const escudoId = e.dataTransfer.getData("text");
-        const escudo = document.getElementById(escudoId);
-        const casilla = e.target;
-
-        if (escudo && casilla.dataset.correcto === escudoId) {
-            casilla.appendChild(escudo);
-            setTimeout(() => {
-                this.testActual++;
-                this.mostrarTest();
-            }, 1000);
-        } else {
-            alert("¡Incorrecto! Inténtalo de nuevo.");
-        }
-    }
-
-    // finalizarJuego() {
+// finalizarJuego() {
     //     let tiempoTotal = Math.floor((Date.now() - this.tiempoInicio) / 1000);
     //     let nombre = prompt("¡Felicidades! Ingresa tu nombre:");
     
@@ -98,78 +17,146 @@ export class Juego {
     //     }
     // }
 
-    finalizarJuego() {
-        // Calculamos el tiempo total
-        const tiempoTotal = Math.floor((Date.now() - this.tiempoInicio) / 1000);
+    import { BDIndexedDB } from './modelo.js';
+    import { Storage } from './storage.js';
     
-        // Crear el contenedor de formulario para registrar el nombre
-        const contenedor = document.getElementById("contenedorFormulario");
-        contenedor.innerHTML = `
-            <label for="nombreJugador">Ingresa tu nombre:</label>
-            <input type="text" id="nombreJugador" placeholder="Nombre del jugador">
-            <button id="guardarPuntuacion">Guardar Puntuación</button>
-        `;
+    export class Juego {
+        constructor() {
+            this.tests = [];
+            this.testActual = 0;
+            this.tiempoInicio = null;
+            this.tiempoRestante = 30; // Tiempo en segundos
+            this.intervaloTiempo = null;
+            this.escudosDisponibles = [
+                { nombre: "Real Madrid", imagen: "img/real_madrid.png" },
+                { nombre: "Barcelona", imagen: "img/barcelona.png" },
+                { nombre: "Atletico Madrid", imagen: "img/atletico.png" },
+                { nombre: "Athletic Club", imagen: "img/athletic.png" }
+            ];
+        }
     
-        // Mostrar la tabla de puntuaciones si no existe
-        this.mostrarTablaPuntuaciones();
+        async iniciarJuego() {
+            await BDIndexedDB.inicializarTests();
+            this.tests = await BDIndexedDB.cargarTests();
+            this.tiempoInicio = Date.now();
+            this.mostrarTest();
+            this.iniciarContador(); 
+        }
     
-        // Evento para guardar la puntuación cuando se hace click en el botón
-        document.getElementById("guardarPuntuacion").addEventListener("click", () => {
-            const nombre = document.getElementById("nombreJugador").value.trim();
-            
-            // Validar si el nombre es válido
-            const regex = /^[a-zA-Z\s]+$/;
-            if (nombre && regex.test(nombre)) {
-                // Obtener puntuaciones del localStorage
-                const puntuaciones = JSON.parse(localStorage.getItem("puntuaciones")) || [];
-                
-                // Guardar nueva puntuación
-                puntuaciones.push({ nombre, tiempo: tiempoTotal });
+        iniciarContador() {
+            const contadorElemento = document.getElementById("time");
     
-                // Guardar en localStorage
-                localStorage.setItem("puntuaciones", JSON.stringify(puntuaciones));
+            this.intervaloTiempo = setInterval(() => {
+                this.tiempoRestante--;
+                contadorElemento.textContent = this.tiempoRestante;
     
-                // Mostrar el nombre y el tiempo en la tabla
-                this.agregarPuntuacionATabla(nombre, tiempoTotal);
+                if (this.tiempoRestante <= 0) {
+                    clearInterval(this.intervaloTiempo);
+                    alert("¡Tiempo agotado!");
+                    this.finalizarJuego();
+                }
+            }, 1000);
+        }
+    
+        mostrarTest() {
+            const test = this.tests[this.testActual];
+            if (!test) return this.finalizarJuego();
+    
+            const tablero = document.getElementById("tablero");
+            const opciones = document.getElementById("opciones");
+    
+            tablero.innerHTML = "";
+            opciones.innerHTML = "";
+    
+            test.serie.forEach((escudo, index) => {
+                const casilla = document.createElement("div");
+                casilla.classList.add("casilla");
+    
+                if (escudo) {
+                    const img = document.createElement("img");
+                    img.src = escudo.imagen;
+                    img.classList.add("escudo");
+                    casilla.appendChild(img);
+                } else {
+                    casilla.dataset.correcto = test.respuestaCorrecta.nombre;
+                    casilla.addEventListener("drop", this.validarRespuesta.bind(this));
+                    casilla.addEventListener("dragover", (e) => e.preventDefault());
+                }
+    
+                tablero.appendChild(casilla);
+            });
+    
+            this.escudosDisponibles.forEach(escudo => {
+                const img = document.createElement("img");
+                const casilla = document.createElement("div");
+                casilla.classList.add("casilla");
+                img.src = escudo.imagen;
+                img.id = escudo.nombre;
+                img.draggable = true;
+                img.classList.add("escudo");
+                img.addEventListener("dragstart", (e) => {
+                    e.dataTransfer.setData("text", escudo.nombre);
+                });
+                opciones.appendChild(casilla);
+                casilla.appendChild(img);
+
+            });
+        }
+    
+        validarRespuesta(e) {
+            e.preventDefault();
+            const escudoId = e.dataTransfer.getData("text");
+            const escudo = document.getElementById(escudoId);
+            const casilla = e.target;
+    
+            if (escudo && casilla.dataset.correcto === escudoId) {
+                casilla.appendChild(escudo);
+                setTimeout(() => {
+                    this.testActual++;
+                    this.mostrarTest();
+                }, 1000);
             } else {
-                alert("Por favor, ingresa un nombre válido (solo letras y espacios).");
+                alert("¡Incorrecto! Inténtalo de nuevo.");
             }
-        });
-    }
+        }
+        finalizarJuego() {
+            clearInterval(this.intervaloTiempo); // ⏳ Detener el contador
+        
+            setTimeout(() => { 
+                const tiempoTotal = Math.floor((Date.now() - this.tiempoInicio) / 1000);
+                
+                // Redirigir a la página final con el tiempo como parámetro en la URL
+                window.location.href = `final.html?tiempo=${tiempoTotal}`;
+            }, 500);
+        }
+        
     
-    // Mostrar la tabla de puntuaciones
-    mostrarTablaPuntuaciones() {
-        const tabla = document.getElementById("tablaPuntuaciones");
-        if (!tabla) {
-            const nuevaTabla = document.createElement("table");
-            nuevaTabla.id = "tablaPuntuaciones";
-            nuevaTabla.innerHTML = `
-                <thead>
-                    <tr>
-                        <th>Nombre</th>
-                        <th>Tiempo (segundos)</th>
-                    </tr>
-                </thead>
-                <tbody></tbody>
-            `;
-            document.body.appendChild(nuevaTabla);
+        mostrarTablaPuntuaciones() {
+            const tabla = document.getElementById("tablaPuntuaciones");
+            if (!tabla) {
+                const nuevaTabla = document.createElement("table");
+                nuevaTabla.id = "tablaPuntuaciones";
+                nuevaTabla.innerHTML = `
+                    <thead>
+                        <tr>
+                            <th>Nombre</th>
+                            <th>Tiempo (segundos)</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                `;
+                document.body.appendChild(nuevaTabla);
+            }
+        }
+    
+        agregarPuntuacionATabla(nombre, tiempo) {
+            const tbody = document.querySelector("#tablaPuntuaciones tbody");
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${nombre}</td><td>${tiempo}</td>`;
+            tbody.appendChild(tr);
         }
     }
     
-    // Agregar la puntuación a la tabla
-    agregarPuntuacionATabla(nombre, tiempo) {
-        const tbody = document.querySelector("#tablaPuntuaciones tbody");
-        const tr = document.createElement("tr");
-        tr.innerHTML = `
-            <td>${nombre}</td>
-            <td>${tiempo}</td>
-        `;
-        tbody.appendChild(tr);
-    }    
-    
-    
-}
-
 
 
 

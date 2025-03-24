@@ -40,6 +40,11 @@
  body {
     font-family: Arial, sans-serif;
     text-align: center;
+    background-image: url('../img/campofutbol-bg.jpg'); /* Ruta a la imagen */
+    background-size: cover; /* La imagen cubre toda la pantalla */
+    background-position: center; /* Centrada */
+    background-attachment: fixed; /* Fija el fondo al hacer scroll */
+    color: white; /* Para mejorar la visibilidad del texto */
 }
 
 #tablero, #opciones {
@@ -66,13 +71,7 @@
 }
 
 /* Estilo para el contenedor del formulario de nombre */
-#contenedorFormulario {
-    margin-top: 20px;
-    padding: 10px;
-    background-color: #f4f4f4;
-    border-radius: 8px;
-    display: inline-block;
-}
+
 
 /* Estilo para el input del nombre */
 #contenedorFormulario input {
@@ -101,15 +100,7 @@
 
 /* Estilo para la tabla */
 #tablaPuntuaciones {
-    margin-top: 20px;
-    width: 80%;
-    margin-left: auto;
-    margin-right: auto;
-    border-collapse: collapse;
-    text-align: left;
-    background-color: #fff;
-    border: 2px solid #ddd;
-    border-radius: 8px;
+    background-color: rgba(255, 255, 255, 0.9); /* Fondo más claro para contraste */
 }
 
 #tablaPuntuaciones th, #tablaPuntuaciones td {
