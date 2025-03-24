@@ -1,9 +1,7 @@
 document.addEventListener("DOMContentLoaded", () => {
-    // Obtener el tiempo desde la URL
     const params = new URLSearchParams(window.location.search);
     const tiempoTotal = params.get("tiempo");
 
-    // Mostrar el tiempo en la página
     document.getElementById("tiempoFinal").textContent = `Tu tiempo fue: ${tiempoTotal} segundos`;
 
     document.getElementById("guardarPuntuacion").addEventListener("click", () => {
@@ -28,8 +26,8 @@ function mostrarTablaPuntuaciones() {
     const puntuaciones = JSON.parse(localStorage.getItem("puntuaciones")) || [];
     const tbody = document.querySelector("#tablaPuntuaciones tbody");
 
-    tbody.innerHTML = ""; // Limpiar tabla antes de agregar nuevas filas
-
+    tbody.innerHTML = "";
+    
     puntuaciones.forEach(({ nombre, tiempo }) => {
         const tr = document.createElement("tr");
         tr.innerHTML = `<td>${nombre}</td><td>${tiempo}</td>`;

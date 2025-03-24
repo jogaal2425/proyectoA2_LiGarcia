@@ -40,11 +40,11 @@
  body {
     font-family: Arial, sans-serif;
     text-align: center;
-    background-image: url('../img/campofutbol-bg.jpg'); /* Ruta a la imagen */
-    background-size: cover; /* La imagen cubre toda la pantalla */
-    background-position: center; /* Centrada */
-    background-attachment: fixed; /* Fija el fondo al hacer scroll */
-    color: white; /* Para mejorar la visibilidad del texto */
+    background-image: url('../img/campofutbol-bg.jpg');
+    background-size: cover;
+    background-position: center;
+    background-attachment: fixed;
+    color: white;
 }
 
 #tablero, #opciones {
@@ -70,10 +70,6 @@
     cursor: grab;
 }
 
-/* Estilo para el contenedor del formulario de nombre */
-
-
-/* Estilo para el input del nombre */
 #contenedorFormulario input {
     padding: 8px;
     font-size: 16px;
@@ -82,7 +78,6 @@
     border-radius: 4px;
 }
 
-/* Estilo para el botón de guardar */
 #contenedorFormulario button {
     padding: 10px 20px;
     background-color: #4CAF50;
@@ -98,9 +93,9 @@
     background-color: #45a049;
 }
 
-/* Estilo para la tabla */
+
 #tablaPuntuaciones {
-    background-color: rgba(255, 255, 255, 0.9); /* Fondo más claro para contraste */
+    background-color: rgba(255, 255, 255, 0.9);
 }
 
 #tablaPuntuaciones th, #tablaPuntuaciones td {
