@@ -6,26 +6,30 @@
     <title>Puntuaciones</title>
     <link rel="stylesheet" href="css/final.css">
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@400;700&display=swap" rel="stylesheet">
-    
 </head>
 <body>
+
     <h1>Puntuación Final</h1>
     <p id="tiempoFinal"></p>
-    
-    <label for="nombreJugador">Ingresa tu nombre:</label>
-    <input type="text" id="nombreJugador" placeholder="Nombre del jugador">
-    <button id="guardarPuntuacion">Guardar Puntuación</button>
+
+    <div id="contenedorFormulario">
+        <label for="nombreJugador">Ingresa tu nombre:</label>
+        <input type="text" id="nombreJugador" placeholder="Nombre del jugador">
+        <button id="guardarPuntuacion">Guardar</button>
+    </div>
 
     <h2>Ranking</h2>
-    <table id="tablaPuntuaciones">
-        <thead>
-            <tr>
-                <th>Nombre</th>
-                <th>Tiempo</th>
-            </tr>
-        </thead>
-        <tbody></tbody>
-    </table>
+    <div id="tablaContenedor">
+        <table id="tablaPuntuaciones">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Tiempo</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+    </div>
 
     <script src="final.js"></script>
 </body>
