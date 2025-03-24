@@ -19,6 +19,7 @@ body {
     display: block; /* Asegura que ocupe toda la línea */
 }
 
+
 /* Estilo para "Tiempo restante" */
 #contador p {
     font-size: 26px; /* Un poco más grande */
