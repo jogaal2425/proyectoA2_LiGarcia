@@ -53,7 +53,8 @@
                 if (this.tiempoRestante <= 0) {
                     clearInterval(this.intervaloTiempo);
                     alert("¡Tiempo agotado!");
-                    this.finalizarJuego();
+                    location.reload();
+                    //this.finalizarJuego();
                 }
             }, 1000);
         }
@@ -156,7 +157,5 @@
         }
     }
     
-
-
 
 

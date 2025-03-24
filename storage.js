@@ -1,6 +1,7 @@
 /**
  * Clase Storage que gestiona Web Storage.
  * @class
+ * Autores: Joan Garcia y un maricon
  */
 export class Storage {
     static guardarPuntuacion(nombre, tiempo) {
