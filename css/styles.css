@@ -64,3 +64,69 @@
     height: 80px;
     cursor: grab;
 }
+
+/* Estilo para el contenedor del formulario de nombre */
+#contenedorFormulario {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #f4f4f4;
+    border-radius: 8px;
+    display: inline-block;
+}
+
+/* Estilo para el input del nombre */
+#contenedorFormulario input {
+    padding: 8px;
+    font-size: 16px;
+    margin-top: 10px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+/* Estilo para el botón de guardar */
+#contenedorFormulario button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 16px;
+    margin-top: 10px;
+}
+
+#contenedorFormulario button:hover {
+    background-color: #45a049;
+}
+
+/* Estilo para la tabla */
+#tablaPuntuaciones {
+    margin-top: 20px;
+    width: 80%;
+    margin-left: auto;
+    margin-right: auto;
+    border-collapse: collapse;
+    text-align: left;
+    background-color: #fff;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+}
+
+#tablaPuntuaciones th, #tablaPuntuaciones td {
+    padding: 12px;
+    border: 1px solid #ddd;
+}
+
+#tablaPuntuaciones th {
+    background-color: #4CAF50;
+    color: white;
+}
+
+#tablaPuntuaciones tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+#tablaPuntuaciones tr:hover {
+    background-color: #ddd;
+}
+

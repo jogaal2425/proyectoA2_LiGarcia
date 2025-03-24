@@ -79,24 +79,94 @@ export class Juego {
         }
     }
 
+    // finalizarJuego() {
+    //     let tiempoTotal = Math.floor((Date.now() - this.tiempoInicio) / 1000);
+    //     let nombre = prompt("¡Felicidades! Ingresa tu nombre:");
+    
+    //     // Regex para validar que el nombre tenga solo letras y espacios (al menos una letra)
+    //     const regex = /^[a-zA-Z\s]+$/;
+    
+    //     if (nombre) {
+    //         // Validar si el nombre coincide con la expresión regular
+    //         if (regex.test(nombre)) {
+    //             Storage.guardarPuntuacion(nombre, tiempoTotal);
+    //             alert(`¡Guardado! ${nombre}, tu tiempo fue: ${tiempoTotal} segundos`);
+    //             location.reload();
+    //         } else {
+    //             alert("Por favor, ingresa un nombre válido (solo letras y espacios).");
+    //         }
+    //     }
+    // }
+
     finalizarJuego() {
-        let tiempoTotal = Math.floor((Date.now() - this.tiempoInicio) / 1000);
-        let nombre = prompt("¡Felicidades! Ingresa tu nombre:");
+        // Calculamos el tiempo total
+        const tiempoTotal = Math.floor((Date.now() - this.tiempoInicio) / 1000);
     
-        // Regex para validar que el nombre tenga solo letras y espacios (al menos una letra)
-        const regex = /^[a-zA-Z\s]+$/;
+        // Crear el contenedor de formulario para registrar el nombre
+        const contenedor = document.getElementById("contenedorFormulario");
+        contenedor.innerHTML = `
+            <label for="nombreJugador">Ingresa tu nombre:</label>
+            <input type="text" id="nombreJugador" placeholder="Nombre del jugador">
+            <button id="guardarPuntuacion">Guardar Puntuación</button>
+        `;
     
-        if (nombre) {
-            // Validar si el nombre coincide con la expresión regular
-            if (regex.test(nombre)) {
-                Storage.guardarPuntuacion(nombre, tiempoTotal);
-                alert(`¡Guardado! ${nombre}, tu tiempo fue: ${tiempoTotal} segundos`);
-                location.reload();
+        // Mostrar la tabla de puntuaciones si no existe
+        this.mostrarTablaPuntuaciones();
+    
+        // Evento para guardar la puntuación cuando se hace click en el botón
+        document.getElementById("guardarPuntuacion").addEventListener("click", () => {
+            const nombre = document.getElementById("nombreJugador").value.trim();
+            
+            // Validar si el nombre es válido
+            const regex = /^[a-zA-Z\s]+$/;
+            if (nombre && regex.test(nombre)) {
+                // Obtener puntuaciones del localStorage
+                const puntuaciones = JSON.parse(localStorage.getItem("puntuaciones")) || [];
+                
+                // Guardar nueva puntuación
+                puntuaciones.push({ nombre, tiempo: tiempoTotal });
+    
+                // Guardar en localStorage
+                localStorage.setItem("puntuaciones", JSON.stringify(puntuaciones));
+    
+                // Mostrar el nombre y el tiempo en la tabla
+                this.agregarPuntuacionATabla(nombre, tiempoTotal);
             } else {
                 alert("Por favor, ingresa un nombre válido (solo letras y espacios).");
             }
+        });
+    }
+    
+    // Mostrar la tabla de puntuaciones
+    mostrarTablaPuntuaciones() {
+        const tabla = document.getElementById("tablaPuntuaciones");
+        if (!tabla) {
+            const nuevaTabla = document.createElement("table");
+            nuevaTabla.id = "tablaPuntuaciones";
+            nuevaTabla.innerHTML = `
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Tiempo (segundos)</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            `;
+            document.body.appendChild(nuevaTabla);
         }
     }
+    
+    // Agregar la puntuación a la tabla
+    agregarPuntuacionATabla(nombre, tiempo) {
+        const tbody = document.querySelector("#tablaPuntuaciones tbody");
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+            <td>${nombre}</td>
+            <td>${tiempo}</td>
+        `;
+        tbody.appendChild(tr);
+    }    
+    
     
 }
 

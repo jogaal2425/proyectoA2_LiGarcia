@@ -56,6 +56,8 @@ export class BDIndexedDB {
             const test2 = new Test([escudos[1], escudos[3], escudos[0], null], escudos[2]);
             const test3 = new Test([escudos[2], escudos[0], escudos[3], null], escudos[1]);
 
+            Math.random
+
             await BDIndexedDB.guardarTest(test1);
             await BDIndexedDB.guardarTest(test2);
             await BDIndexedDB.guardarTest(test3);
