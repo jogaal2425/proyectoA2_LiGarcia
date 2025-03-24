@@ -25,7 +25,7 @@
             this.tests = [];
             this.testActual = 0;
             this.tiempoInicio = null;
-            this.tiempoRestante = 30; // Tiempo en segundos
+            this.tiempoRestante = 30;
             this.intervaloTiempo = null;
             this.escudosDisponibles = [
                 { nombre: "Real Madrid", imagen: "img/real_madrid.png" },
@@ -120,12 +120,11 @@
             }
         }
         finalizarJuego() {
-            clearInterval(this.intervaloTiempo); // ⏳ Detener el contador
+            clearInterval(this.intervaloTiempo);
         
             setTimeout(() => { 
                 const tiempoTotal = Math.floor((Date.now() - this.tiempoInicio) / 1000);
                 
-                // Redirigir a la página final con el tiempo como parámetro en la URL
                 window.location.href = `final.html?tiempo=${tiempoTotal}`;
             }, 500);
         }
