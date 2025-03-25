@@ -1,22 +1,3 @@
-// finalizarJuego() {
-    //     let tiempoTotal = Math.floor((Date.now() - this.tiempoInicio) / 1000);
-    //     let nombre = prompt("¡Felicidades! Ingresa tu nombre:");
-    
-    //     // Regex para validar que el nombre tenga solo letras y espacios (al menos una letra)
-    //     const regex = /^[a-zA-Z\s]+$/;
-    
-    //     if (nombre) {
-    //         // Validar si el nombre coincide con la expresión regular
-    //         if (regex.test(nombre)) {
-    //             Storage.guardarPuntuacion(nombre, tiempoTotal);
-    //             alert(`¡Guardado! ${nombre}, tu tiempo fue: ${tiempoTotal} segundos`);
-    //             location.reload();
-    //         } else {
-    //             alert("Por favor, ingresa un nombre válido (solo letras y espacios).");
-    //         }
-    //     }
-    // }
-
     import { BDIndexedDB } from './modelo.js';
     import { Storage } from './storage.js';
     
@@ -24,9 +5,13 @@
         constructor() {
             this.tests = [];
             this.testActual = 0;
+            this.historialTests = [];
+            this.escudosDisponibles = [];
             this.tiempoInicio = null;
             this.tiempoRestante = 30;
             this.intervaloTiempo = null;
+            this.puntuacionesMap = new Map();
+            this.nombresSet = new Set();
             this.escudosDisponibles = [
                 { nombre: "Real Madrid", imagen: "img/real_madrid.png" },
                 { nombre: "Barcelona", imagen: "img/barcelona.png" },
@@ -54,12 +39,32 @@
                     clearInterval(this.intervaloTiempo);
                     alert("¡Tiempo agotado!");
                     location.reload();
-                    //this.finalizarJuego();
                 }
             }, 1000);
         }
+
+        agregarEscudo(nombre, imagen) {
+            this.escudosDisponibles.push({ nombre, imagen });
+        }
+        obtenerSiguienteEscudo() {
+            return this.escudosDisponibles.shift();
+        }
     
+
+        volverTestAnterior() {
+            if (this.historialTests.length > 0) {
+                this.testActual = this.historialTests.pop();
+                this.mostrarTest();
+            } else {
+                alert("No hay tests anteriores.");
+            }
+        }
+
         mostrarTest() {
+            if (this.testActual > 0) {
+                this.historialTests.push(this.testActual - 1);
+            }
+
             const test = this.tests[this.testActual];
             if (!test) return this.finalizarJuego();
     
@@ -69,10 +74,11 @@
             tablero.innerHTML = "";
             opciones.innerHTML = "";
     
-            test.serie.forEach((escudo, index) => {
+            for (const indice in test.serie) {
+                const escudo = test.serie[indice];
                 const casilla = document.createElement("div");
                 casilla.classList.add("casilla");
-    
+        
                 if (escudo) {
                     const img = document.createElement("img");
                     img.src = escudo.imagen;
@@ -83,11 +89,11 @@
                     casilla.addEventListener("drop", this.validarRespuesta.bind(this));
                     casilla.addEventListener("dragover", (e) => e.preventDefault());
                 }
-    
+        
                 tablero.appendChild(casilla);
-            });
+            };
     
-            this.escudosDisponibles.forEach(escudo => {
+            for (const escudo of this.escudosDisponibles) {
                 const img = document.createElement("img");
                 const casilla = document.createElement("div");
                 casilla.classList.add("casilla");
@@ -100,8 +106,7 @@
                 });
                 opciones.appendChild(casilla);
                 casilla.appendChild(img);
-
-            });
+            }
         }
     
         validarRespuesta(e) {
@@ -130,30 +135,31 @@
             }, 500);
         }
         
-    
         mostrarTablaPuntuaciones() {
-            const tabla = document.getElementById("tablaPuntuaciones");
-            if (!tabla) {
-                const nuevaTabla = document.createElement("table");
-                nuevaTabla.id = "tablaPuntuaciones";
-                nuevaTabla.innerHTML = `
-                    <thead>
-                        <tr>
-                            <th>Nombre</th>
-                            <th>Tiempo (segundos)</th>
-                        </tr>
-                    </thead>
-                    <tbody></tbody>
-                `;
-                document.body.appendChild(nuevaTabla);
-            }
-        }
-    
-        agregarPuntuacionATabla(nombre, tiempo) {
+            const puntuaciones = Storage.obtenerPuntuaciones();
             const tbody = document.querySelector("#tablaPuntuaciones tbody");
-            const tr = document.createElement("tr");
-            tr.innerHTML = `<td>${nombre}</td><td>${tiempo}</td>`;
-            tbody.appendChild(tr);
+            tbody.innerHTML = "";
+    
+            puntuaciones
+                .sort((a, b) => a.tiempo - b.tiempo)
+                .slice(0, 5)
+                .forEach(({ nombre, tiempo }) => {
+                    const tr = document.createElement("tr");
+                    tr.innerHTML = `<td>${nombre}</td><td>${tiempo}</td>`;
+                    tbody.appendChild(tr);
+                });
+        }
+
+        agregarPuntuacion(nombre, tiempo) {
+            if (this.nombresSet.has(nombre)) {
+                alert("Este nombre ya ha sido registrado.");
+                return;
+            }
+            this.nombresSet.add(nombre);
+            this.puntuacionesMap.set(nombre, tiempo);
+    
+            Storage.guardarPuntuacion(nombre, tiempo);
+            this.mostrarTablaPuntuaciones();
         }
     }
     

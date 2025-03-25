@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
         if (nombre && regex.test(nombre)) {
             const puntuaciones = JSON.parse(localStorage.getItem("puntuaciones")) || [];
 
-            const existe = puntuaciones.some(p => p.nombre.toLowerCase() === nombre.toLowerCase());
+            const existe = puntuaciones.filter(p => p.nombre.toLowerCase() === nombre.toLowerCase()).length > 0;
             if (existe) {
                 alert("Este nombre ya ha sido registrado. Usa otro.");
                 return;
@@ -35,11 +35,17 @@ function mostrarTablaPuntuaciones() {
 
     tbody.innerHTML = "";
 
-    puntuaciones.forEach(({ nombre, tiempo }) => {
-        const tr = document.createElement("tr");
-        tr.innerHTML = `<td>${nombre}</td><td>${tiempo}</td>`;
-        tbody.appendChild(tr);
-    });
+    puntuaciones
+        .sort((a, b) => a.tiempo - b.tiempo)
+        .slice(0, 5)
+        .forEach(({ nombre, tiempo }) => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `<td>${nombre}</td><td>${tiempo}</td>`;
+            tbody.appendChild(tr);
+        });
+
+    const tiempoTotal = puntuaciones.reduce((acc, jugador) => acc + jugador.tiempo, 0);
+    console.log(`Tiempo total de todos los jugadores: ${tiempoTotal} segundos`);
 }
 
 function agregarPuntuacionATabla(nombre, tiempo) {

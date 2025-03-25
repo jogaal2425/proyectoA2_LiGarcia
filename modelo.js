@@ -58,12 +58,14 @@ export class BDIndexedDB {
             const test1 = new Test([escudos[0], escudos[1], escudos[0], null], escudos[1]);
             const test2 = new Test([escudos[2], escudos[2], escudos[3], null], escudos[3]);
             const test3 = new Test([escudos[2], escudos[3], escudos[3], null], escudos[2]);
+            const test4 = new Test([escudos[0], escudos[1], escudos[1], null], escudos[1]);
 
             //Math.random
 
             await BDIndexedDB.guardarTest(test1);
             await BDIndexedDB.guardarTest(test2);
             await BDIndexedDB.guardarTest(test3);
+            await BDIndexedDB.guardarTest(test4);
         }
     }
 }
