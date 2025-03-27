@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&family=Montserrat:wght@400;700&display=swap');
+
 body {
     font-family: 'Poppins', sans-serif;
     text-align: center;
@@ -8,6 +10,8 @@ body {
     color: white;
     text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.7);
 }
+
+
 
 #contenedorFormulario {
     display: flex;
