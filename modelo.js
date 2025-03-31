@@ -1,7 +1,17 @@
-export class Escudo {
+class EscudoBase {
     constructor(nombre, imagen) {
         this.nombre = nombre;
         this.imagen = `img/${imagen}`;
+    }
+
+    mostrarEscudo() {
+        return `Escudo: ${this.nombre}`;
+    }
+}
+
+export class Escudo extends EscudoBase {
+    constructor(nombre, imagen) {
+        super(nombre, imagen);
     }
 }
 

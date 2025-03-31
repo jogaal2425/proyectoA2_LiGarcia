@@ -1,5 +1,6 @@
     import { BDIndexedDB } from './modelo.js';
     import { Storage } from './storage.js';
+    import { Escudo } from './modelo.js';
     
     export class Juego {
         constructor() {
@@ -44,13 +45,12 @@
         }
 
         agregarEscudo(nombre, imagen) {
-            this.escudosDisponibles.push({ nombre, imagen });
+            this.escudosDisponibles.push(new Escudo(nombre, imagen));
         }
         obtenerSiguienteEscudo() {
             return this.escudosDisponibles.shift();
         }
     
-
         volverTestAnterior() {
             if (this.historialTests.length > 0) {
                 this.testActual = this.historialTests.pop();
