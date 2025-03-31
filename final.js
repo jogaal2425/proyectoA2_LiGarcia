@@ -1,19 +1,33 @@
 document.addEventListener("DOMContentLoaded", () => {
     const params = new URLSearchParams(window.location.search);
     const tiempoTotal = params.get("tiempo");
+    const botonGuardar = document.getElementById("guardarPuntuacion");
+    const nombreInput = document.getElementById("nombreJugador");
 
     document.getElementById("tiempoFinal").textContent = `Tu tiempo fue: ${tiempoTotal} segundos`;
 
-    document.getElementById("guardarPuntuacion").addEventListener("click", () => {
-        const nombre = document.getElementById("nombreJugador").value.trim();
+    if (sessionStorage.getItem("noGuardar") !== "true") {
+        botonGuardar.disabled = true;
+    }
+
+    nombreInput.addEventListener("input", () => {
+        if (nombreInput.value.trim() !== "" && sessionStorage.getItem("noGuardar") === "true") {
+            botonGuardar.disabled = false;
+        } else {
+            botonGuardar.disabled = true;
+        }
+    });
+
+    botonGuardar.addEventListener("click", () => {
+        const nombre = nombreInput.value.trim();
         const regex = /^[a-zA-Z\s]+$/;
 
         if (nombre && regex.test(nombre)) {
             const puntuaciones = JSON.parse(localStorage.getItem("puntuaciones")) || [];
+            const existe = puntuaciones.some(p => p.nombre.toLowerCase() === nombre.toLowerCase());
 
-            const existe = puntuaciones.filter(p => p.nombre.toLowerCase() === nombre.toLowerCase()).length > 0;
             if (existe) {
-                alert("Este nombre ya ha sido registrado. Usa otro.");
+                alert("Este nombre ya ha sido registrado. Juega otra partida para guardar otro nombre.");
                 return;
             }
 
@@ -21,6 +35,8 @@ document.addEventListener("DOMContentLoaded", () => {
             localStorage.setItem("puntuaciones", JSON.stringify(puntuaciones));
 
             agregarPuntuacionATabla(nombre, tiempoTotal);
+            sessionStorage.setItem("noGuardar", "false");
+            botonGuardar.disabled = true;
         } else {
             alert("Por favor, ingresa un nombre válido (solo letras y espacios).");
         }
@@ -28,6 +44,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     mostrarTablaPuntuaciones();
 });
+
+sessionStorage.setItem("noGuardar", "true");
 
 function mostrarTablaPuntuaciones() {
     const puntuaciones = JSON.parse(localStorage.getItem("puntuaciones")) || [];
