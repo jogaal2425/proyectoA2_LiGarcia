@@ -1,28 +1,15 @@
 /**
- * Clase DragAndDrop que gestiona la funcionalidad de arrastrar y soltar.
- * @class
+ * Clase para gestionar el almacenamiento de puntuaciones en LocalStorage.
  */
-class DragAndDrop {
-    static activar() {
-        const escudos = document.querySelectorAll('.escudo');
-        const casillas = document.querySelectorAll('.casilla');
-
-        escudos.forEach(escudo => {
-            escudo.draggable = true;
-            escudo.addEventListener('dragstart', (e) => {
-                e.dataTransfer.setData("text", escudo.id);
-            });
-        });
-
-        casillas.forEach(casilla => {
-            casilla.addEventListener('dragover', (e) => e.preventDefault());
-
-            casilla.addEventListener('drop', (e) => {
-                e.preventDefault();
-                const id = e.dataTransfer.getData("text");
-                const escudo = document.getElementById(id);
-                casilla.appendChild(escudo);
-            });
-        });
+export class Storage {
+    /**
+     * Guarda una nueva puntuación en el almacenamiento local.
+     * @param {string} nombre - Nombre del jugador.
+     * @param {number} tiempo - Tiempo registrado en segundos.
+     */
+    static guardarPuntuacion(nombre, tiempo) {
+        let puntuaciones = JSON.parse(localStorage.getItem("puntuaciones")) || [];
+        puntuaciones.push({ nombre, tiempo });
+        localStorage.setItem("puntuaciones", JSON.stringify(puntuaciones));
     }
 }
