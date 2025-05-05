@@ -106,7 +106,6 @@ export class BDIndexedDB {
                 new Escudo("Athletic Club", "athletic.png"),
             ];
 
-            // Se crean algunos tests con escudos mezclados
             const test1 = new Test([escudos[0], escudos[1], escudos[0], null], escudos[1]);
             const test2 = new Test([escudos[2], escudos[2], escudos[3], null], escudos[3]);
             const test3 = new Test([escudos[2], escudos[3], escudos[3], null], escudos[2]);
